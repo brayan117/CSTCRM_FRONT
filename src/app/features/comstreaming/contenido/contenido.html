@@ -1,0 +1,9 @@
+<app-page-header
+  title="Contenido y canales · Comstreaming"
+  subtitle="Canales y paquetes disponibles para asignación."
+/>
+
+<app-panel title="Catálogo de canales">
+  <span panelActions class="pill">{{ catalog.canales.length }} canales</span>
+  <app-data-table [columns]="columns" [rows]="rows" />
+</app-panel>

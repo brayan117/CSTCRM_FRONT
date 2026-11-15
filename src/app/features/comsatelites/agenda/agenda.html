@@ -1,0 +1,172 @@
+<app-page-header
+  title="Agenda · Matriz semanal"
+  subtitle="Citas para atender clientes: mantenimientos, instalaciones y activaciones. Haz clic en una cita para ver el detalle."
+>
+  <button type="button" class="btn btn-ghost">‹ Semana</button>
+  <button type="button" class="btn btn-ghost">Semana ›</button>
+  <button type="button" class="btn btn-primary" (click)="openNew()">+ Nueva cita</button>
+</app-page-header>
+
+<app-panel title="Semana del 16 al 20 de noviembre de 2026">
+  <div panelActions>
+    <app-badge variant="blue" label="Mantenimiento" />
+    <app-badge variant="ok" label="Instalación" />
+    <app-badge variant="warn" label="Activación SIM" />
+    <app-badge variant="bad" label="En taller / Desconectado" />
+  </div>
+  <app-weekly-agenda
+    [rows]="agenda.rows()"
+    [interactive]="true"
+    (slotClick)="openCita($event)"
+  />
+  <p class="small muted" style="margin-top:12px">
+    Haz clic sobre una cita para ver su detalle o reprogramar.
+  </p>
+</app-panel>
+
+<app-modal
+  [open]="citaOpen()"
+  (closed)="citaOpen.set(false)"
+  [wide]="true"
+  [title]="'Cita · ' + (detalle()?.cita?.slot?.t ?? '')"
+  saveLabel="Marcar como atendida"
+  (save)="atenderCita()"
+>
+  @if (detalle(); as d) {
+    <div class="hv-head" style="margin-bottom:16px">
+      <div>
+        <div class="hvk">Tipo de cita</div>
+        <div class="hvv">{{ d.cita.slot.t }}</div>
+      </div>
+      <div>
+        <div class="hvk">Fecha y hora</div>
+        <div class="hvv">{{ d.cita.day.label }} · {{ d.cita.hora }}</div>
+      </div>
+      <div>
+        <div class="hvk">Técnico asignado</div>
+        <div class="hvv">{{ d.cita.slot.tecnico }}</div>
+      </div>
+      <div>
+        <div class="hvk">Estado del móvil</div>
+        <div class="hvv" style="text-transform:capitalize">{{ d.movil?.estado ?? '—' }}</div>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel" style="margin:0">
+        <div class="panel-h"><h3><span class="bar"></span>Vehículo</h3></div>
+        <div class="panel-b">
+          <table>
+            <tr><td class="small muted">Móvil</td><td><b>{{ d.movil?.id ?? '—' }}</b></td></tr>
+            <tr><td class="small muted">Placa</td><td>{{ d.movil?.placa ?? '—' }}</td></tr>
+            <tr>
+              <td class="small muted">Vehículo</td>
+              <td>{{ d.movil?.marca ?? '—' }} {{ d.movil?.modelo ?? '' }}</td>
+            </tr>
+            <tr><td class="small muted">Tipo</td><td>{{ d.movil?.tipo ?? '—' }}</td></tr>
+            <tr><td class="small muted">Cliente</td><td>{{ d.movil?.cliente ?? '—' }}</td></tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" style="margin:0">
+        <div class="panel-h"><h3><span class="bar"></span>Equipo y simcard asignados</h3></div>
+        <div class="panel-b">
+          <table>
+            <tr><td class="small muted">Equipo</td><td><b>{{ d.equipo?.id ?? d.movil?.equipo ?? '—' }}</b></td></tr>
+            <tr><td class="small muted">Tipo de equipo</td><td>{{ d.equipo?.tipo ?? '—' }}</td></tr>
+            <tr>
+              <td class="small muted">Marca / serie</td>
+              <td class="small">{{ d.equipo?.marca ?? '—' }} {{ d.equipo?.serie ?? '' }}</td>
+            </tr>
+            <tr><td class="small muted">Simcard</td><td><b>{{ d.sim?.id ?? d.movil?.sim ?? '—' }}</b></td></tr>
+            <tr><td class="small muted">Operador</td><td>{{ d.sim?.operador ?? '—' }}</td></tr>
+            <tr><td class="small muted">Plan</td><td>{{ d.sim?.plan ?? '—' }}</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:14px">
+      <label>Notas de la cita</label>
+      <textarea
+        rows="2"
+        placeholder="Ej: mantenimiento preventivo, cambio de equipo, activación pendiente..."
+      ></textarea>
+    </div>
+  }
+</app-modal>
+
+<app-modal
+  [open]="newOpen()"
+  (closed)="newOpen.set(false)"
+  title="Nueva cita en agenda"
+  saveLabel="Guardar cita"
+  (save)="saveCita()"
+>
+  <form [formGroup]="form" (ngSubmit)="saveCita()">
+    <div class="form-row three">
+      <div class="field">
+        <label>Día</label>
+        <select formControlName="dia">
+          <option value="lunes">Lunes</option>
+          <option value="martes">Martes</option>
+          <option value="miercoles">Miércoles</option>
+          <option value="jueves">Jueves</option>
+          <option value="viernes">Viernes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Hora</label>
+        <select formControlName="hora">
+          <option>08:00</option>
+          <option>09:00</option>
+          <option>10:00</option>
+          <option>11:00</option>
+          <option>14:00</option>
+          <option>15:00</option>
+          <option>16:00</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Tipo de cita</label>
+        <select formControlName="tipo">
+          <option>Mantenimiento</option>
+          <option>Instalación</option>
+          <option>Activación SIM</option>
+          <option>Otro</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Móvil</label>
+        <select formControlName="movil">
+          @for (movil of inventory.moviles(); track movil.id) {
+            <option [value]="movil.id">
+              {{ movil.id }} · {{ movil.placa }} — {{ movil.cliente }}
+            </option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label>Técnico asignado</label>
+        <select formControlName="tecnico">
+          @for (tecnico of inventory.tecnicos(); track tecnico.id) {
+            @if (tecnico.estado !== 'vacaciones') {
+              <option [value]="tecnico.nombre">
+                {{ tecnico.nombre }} · {{ tecnico.especialidad }}
+              </option>
+            }
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Observaciones</label>
+      <textarea rows="2" formControlName="obs" placeholder="Describe la cita..."></textarea>
+    </div>
+  </form>
+</app-modal>

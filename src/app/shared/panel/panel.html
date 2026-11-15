@@ -1,0 +1,9 @@
+<div class="panel">
+  @if (title()) {
+    <div class="panel-h">
+      <h3><span class="bar"></span>{{ title() }}</h3>
+      <div class="panel-actions"><ng-content select="[panelActions]" /></div>
+    </div>
+  }
+  <div class="panel-b"><ng-content /></div>
+</div>

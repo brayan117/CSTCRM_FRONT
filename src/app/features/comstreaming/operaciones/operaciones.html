@@ -1,0 +1,9 @@
+<app-page-header
+  title="Operaciones · Comstreaming"
+  subtitle="Activaciones de cuentas, incidencias de señal y soporte técnico."
+/>
+
+<app-panel title="Registro de operaciones">
+  <span panelActions class="pill">{{ catalog.streamOperaciones.length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="rows" />
+</app-panel>

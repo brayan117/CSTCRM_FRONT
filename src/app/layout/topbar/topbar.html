@@ -1,0 +1,18 @@
+<header class="topbar">
+  <button type="button" class="hamburger" (click)="menu.emit()">☰</button>
+  <div class="crumb">
+    Comsatech ERP › <b>{{ breadcrumb().section }}</b> ›
+    <span>{{ breadcrumb().module }}</span>
+  </div>
+  <div class="search">
+    <input type="text" placeholder="Buscar móvil, equipo, simcard, técnico..." />
+  </div>
+  <div class="user">
+    <div class="avatar">{{ initials() }}</div>
+    <div>
+      <div class="uname">{{ auth.user()?.nombre ?? 'Invitado' }}</div>
+      <div class="urole">{{ auth.user()?.rol ?? '' }}</div>
+    </div>
+    <button type="button" class="btn btn-ghost logout" (click)="logout()">Salir</button>
+  </div>
+</header>

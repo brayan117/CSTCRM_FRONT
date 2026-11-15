@@ -1,0 +1,11 @@
+<div class="app">
+  <app-sidebar [open]="sidebarOpen()" (navigate)="sidebarOpen.set(false)" />
+  @if (sidebarOpen()) {
+    <div class="sidebar-overlay" (click)="sidebarOpen.set(false)"></div>
+  }
+  <div class="main">
+    <app-topbar (menu)="sidebarOpen.set(true)" />
+    <main class="content"><router-outlet /></main>
+  </div>
+  <app-toast-container />
+</div>

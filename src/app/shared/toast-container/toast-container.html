@@ -1,0 +1,10 @@
+@if (toast.messages().length) {
+  <div class="toasts">
+    @for (message of toast.messages(); track message.id) {
+      <div [class]="'toast ' + message.type" (click)="toast.dismiss(message.id)">
+        <span class="toast-icon">{{ icon(message.type) }}</span>
+        <span>{{ message.text }}</span>
+      </div>
+    }
+  </div>
+}

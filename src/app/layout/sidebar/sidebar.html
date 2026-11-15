@@ -1,0 +1,53 @@
+<aside class="sidebar" [class.show]="open()">
+  <div class="brand">
+    <div class="logo">C</div>
+    <div>
+      <h1>Comsatech</h1>
+      <span>ERP · v1.0</span>
+    </div>
+  </div>
+
+  @for (section of sections; track section.id) {
+    <div class="nav-section">
+      <button
+        type="button"
+        class="nav-head"
+        [class.open]="isOpen(section.id)"
+        (click)="toggle(section.id)"
+      >
+        <span class="ic">{{ section.icon }}</span>
+        <span class="ttl">{{ section.label }}</span>
+        <span class="tag">{{ section.tag }}</span>
+        <span class="chev">▶</span>
+      </button>
+
+      <div class="nav-body" [class.open]="isOpen(section.id)">
+        @for (item of section.items; track item.route) {
+          <a
+            class="sub-item"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+            (click)="navigate.emit()"
+          >
+            <span class="dot"></span>
+            {{ item.label }}
+          </a>
+          @if (item.children) {
+            @for (child of item.children; track child.route) {
+              <a
+                class="sub-item sub-sub"
+                [routerLink]="child.route"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="navigate.emit()"
+              >
+                ● {{ child.label }}
+              </a>
+            }
+          }
+        }
+      </div>
+    </div>
+  }
+</aside>

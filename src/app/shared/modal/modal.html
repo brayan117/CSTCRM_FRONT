@@ -1,0 +1,17 @@
+@if (open()) {
+  <div class="modal-mask" (click)="close()">
+    <div class="modal" [class.wide]="wide()" (click)="$event.stopPropagation()">
+      <div class="modal-h">
+        <h3>{{ title() }}</h3>
+        <button type="button" class="x" (click)="close()">✕</button>
+      </div>
+      <div class="modal-b"><ng-content /></div>
+      <div class="modal-f">
+        <button type="button" class="btn btn-ghost" (click)="close()">Cerrar</button>
+        <button type="button" class="btn btn-primary" (click)="save.emit()">
+          {{ saveLabel() }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

@@ -1,0 +1,62 @@
+<app-page-header
+  title="Inventario de radios · Comradios"
+  subtitle="Radios móviles y portátiles asignados al servicio de radiocomunicaciones."
+>
+  <button type="button" class="btn btn-primary" (click)="openNew()">+ Nuevo radio</button>
+</app-page-header>
+
+<div class="kgrid">
+  <app-kpi-card icon="📻" [value]="kpis().total" label="Radios totales" color="blue" />
+  <app-kpi-card icon="✅" [value]="kpis().operativos" label="Operativos" color="cyan" />
+  <app-kpi-card icon="🔧" [value]="kpis().taller" label="En taller" color="gray" />
+  <app-kpi-card icon="⚠️" [value]="kpis().desconectados" label="Descontinuados" color="dark" />
+</div>
+
+<app-panel title="Listado de radios">
+  <span panelActions class="pill">{{ catalog.radios().length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="catalog.radios()" />
+</app-panel>
+
+<app-modal
+  [open]="modalOpen()"
+  (closed)="modalOpen.set(false)"
+  title="Nuevo radio"
+  saveLabel="Guardar radio"
+  (save)="save()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-row">
+      <div class="field">
+        <label>Tipo *</label>
+        <select formControlName="tipo">
+          <option>Portátil</option>
+          <option>Móvil</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Marca / Modelo *</label>
+        <input formControlName="marca" placeholder="Motorola DP4800" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Serial *</label>
+        <input formControlName="serial" placeholder="MOT-00000" />
+      </div>
+      <div class="field">
+        <label>Cliente *</label>
+        <input formControlName="cliente" placeholder="Nombre del cliente" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Estado</label>
+      <select formControlName="estado">
+        <option value="operativo">Operativo</option>
+        <option value="taller">En taller</option>
+        <option value="desconectado">Descontinuado</option>
+      </select>
+    </div>
+  </form>
+</app-modal>

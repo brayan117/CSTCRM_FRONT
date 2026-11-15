@@ -1,0 +1,92 @@
+<app-page-header
+  title="Móviles (vehículos)"
+  subtitle="Vehículos con equipo satelital instalado y simcard asignada."
+>
+  <button type="button" class="btn btn-primary" (click)="openNew()">+ Nuevo móvil</button>
+</app-page-header>
+
+<app-panel title="Listado de móviles">
+  <span panelActions class="pill">{{ inventory.moviles().length }} registros</span>
+  <app-data-table
+    [columns]="columns"
+    [rows]="inventory.moviles()"
+    [actions]="actions"
+    [clickable]="true"
+    (rowClick)="verHoja($event)"
+    (actionClick)="onAction($event)"
+  />
+</app-panel>
+
+<app-modal
+  [open]="modalOpen()"
+  (closed)="modalOpen.set(false)"
+  title="Nuevo móvil"
+  saveLabel="Guardar móvil"
+  (save)="save()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-row">
+      <div class="field">
+        <label>Placa *</label>
+        <input formControlName="placa" placeholder="ABC-123" />
+      </div>
+      <div class="field">
+        <label>Tipo</label>
+        <select formControlName="tipo">
+          <option>Camioneta</option>
+          <option>Volquete</option>
+          <option>Sedan</option>
+          <option>Pickup</option>
+          <option>Otro</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Marca</label>
+        <input formControlName="marca" placeholder="Toyota" />
+      </div>
+      <div class="field">
+        <label>Modelo</label>
+        <input formControlName="modelo" placeholder="2024" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Cliente *</label>
+        <input formControlName="cliente" placeholder="Nombre del cliente" />
+      </div>
+      <div class="field">
+        <label>Estado</label>
+        <select formControlName="estado">
+          <option value="operativo">Operativo</option>
+          <option value="taller">En taller</option>
+          <option value="desconectado">Desconectado</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Equipo</label>
+        <select formControlName="equipo">
+          <option value="—">Sin equipo</option>
+          @for (equipo of inventory.equipos(); track equipo.id) {
+            <option [value]="equipo.id">{{ equipo.id }} · {{ equipo.tipo }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label>Simcard</label>
+        <select formControlName="sim">
+          <option value="—">Sin simcard</option>
+          @for (sim of inventory.simcards(); track sim.id) {
+            <option [value]="sim.id">{{ sim.id }} · {{ sim.operador }}</option>
+          }
+        </select>
+      </div>
+    </div>
+  </form>
+</app-modal>

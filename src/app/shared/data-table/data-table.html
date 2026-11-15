@@ -1,0 +1,74 @@
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        @for (col of columns(); track col.key) {
+          <th [style.width]="col.width || null" [style.text-align]="col.align || 'left'">
+            {{ col.label }}
+          </th>
+        }
+        @if (actions().length) {
+          <th class="actions-cell"></th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @if (rows().length === 0) {
+        <tr>
+          <td
+            class="empty"
+            [attr.colspan]="columns().length + (actions().length ? 1 : 0)"
+          >
+            Sin registros.
+          </td>
+        </tr>
+      }
+      @for (row of rows(); track row['id'] ?? $index) {
+        <tr [class.clickable]="clickable()" (click)="onRow(row)">
+          @for (col of columns(); track col.key) {
+            @switch (col.type) {
+              @case ('strong') {
+                <td><b>{{ asText(row[col.key]) }}</b></td>
+              }
+              @case ('muted') {
+                <td class="small muted">{{ asText(row[col.key]) }}</td>
+              }
+              @case ('badge') {
+                <td><app-badge [status]="asText(row[col.key])" /></td>
+              }
+              @case ('chip') {
+                <td>
+                  <app-badge [status]="asText(row[col.key])" [variant]="col.variant ?? 'blue'" />
+                </td>
+              }
+              @case ('progress') {
+                <td>
+                  <div class="prog-cell">
+                    <app-progress-bar [value]="asNum(row[col.key])" />
+                    <span class="small">{{ asNum(row[col.key]) }}%</span>
+                  </div>
+                </td>
+              }
+              @default {
+                <td>{{ asText(row[col.key]) }}</td>
+              }
+            }
+          }
+          @if (actions().length) {
+            <td class="actions-cell">
+              @for (action of actions(); track action.label) {
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-sm"
+                  (click)="onAction($event, action, row)"
+                >
+                  {{ action.icon }} {{ action.label }}
+                </button>
+              }
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

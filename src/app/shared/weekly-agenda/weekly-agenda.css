@@ -1,0 +1,89 @@
+.matrix-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+.matrix {
+  border-collapse: collapse;
+  min-width: 820px;
+  width: 100%;
+}
+
+.matrix th,
+.matrix td {
+  border: 1px solid var(--line);
+  text-align: center;
+  font-size: 12px;
+  padding: 0;
+}
+
+.matrix thead th {
+  background: var(--c3);
+  color: #fff;
+  font-weight: 600;
+  padding: 9px 4px;
+  text-transform: none;
+  letter-spacing: 0;
+  border: 1px solid var(--c3);
+  font-size: 12px;
+}
+
+.matrix thead th.hora {
+  background: var(--c1);
+  min-width: 84px;
+}
+
+.matrix tbody th {
+  background: #f1f6fc;
+  color: var(--c3);
+  font-weight: 600;
+  width: 84px;
+  text-align: center;
+  border: 1px solid var(--line);
+  vertical-align: middle;
+}
+
+.matrix td {
+  height: 54px;
+  vertical-align: top;
+}
+
+.slot {
+  margin: 2px;
+  padding: 4px 5px;
+  border-radius: 5px;
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: left;
+  cursor: pointer;
+}
+
+.slot.s-mant {
+  background: #e1ecfb;
+  color: var(--c1);
+  border-left: 3px solid var(--c1);
+}
+
+.slot.s-inst {
+  background: #e3f5ec;
+  color: var(--ok);
+  border-left: 3px solid var(--ok);
+}
+
+.slot.s-act {
+  background: #fbf0d8;
+  color: var(--warn);
+  border-left: 3px solid var(--warn);
+}
+
+.slot.s-tall {
+  background: #fbe3e3;
+  color: var(--bad);
+  border-left: 3px solid var(--bad);
+}
+
+.slot .t {
+  font-weight: 700;
+  display: block;
+}

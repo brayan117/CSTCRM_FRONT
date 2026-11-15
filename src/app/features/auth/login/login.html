@@ -1,0 +1,98 @@
+<div class="login">
+  <section class="login-brand">
+    <div class="brand">
+      <div class="logo">C</div>
+      <div>
+        <h1>Comsatech</h1>
+        <span>ERP · v1.0</span>
+      </div>
+    </div>
+
+    <h2>Controla tus operaciones satelitales, radios y streaming en un solo lugar.</h2>
+    <p>
+      Inventario, técnicos, agenda y seguimiento de operaciones para los servicios de
+      Comsatelites, Comradios y Comstreaming.
+    </p>
+
+    <div class="login-services">
+      <div class="login-service">
+        <span style="font-size:20px">🛰️</span>
+        <div>
+          <b>Comsatelites</b>
+          <div><span>Inventario, operaciones y hoja de vida de vehículos.</span></div>
+        </div>
+      </div>
+      <div class="login-service">
+        <span style="font-size:20px">📻</span>
+        <div>
+          <b>Comradios</b>
+          <div><span>Radios móviles y portátiles, programación y soporte.</span></div>
+        </div>
+      </div>
+      <div class="login-service">
+        <span style="font-size:20px">📺</span>
+        <div>
+          <b>Comstreaming</b>
+          <div><span>Canales, activaciones e incidencias de señal.</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="login-panel">
+    <div class="login-box">
+      <h1>Iniciar sesión</h1>
+      <p class="sub">Ingresa tus credenciales para acceder al ERP.</p>
+
+      <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+        <div class="field">
+          <label for="username">Usuario</label>
+          <input
+            id="username"
+            type="text"
+            formControlName="username"
+            placeholder="admin"
+            autocomplete="username"
+          />
+          @if (invalid('username')) {
+            <small class="field-error">Ingresa tu usuario.</small>
+          }
+        </div>
+
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <div class="pass-wrap">
+            <input
+              id="password"
+              [type]="show() ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="•••••"
+              autocomplete="current-password"
+            />
+            <button
+              type="button"
+              class="pass-toggle"
+              (click)="show.set(!show())"
+              [attr.aria-label]="show() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            >
+              {{ show() ? '🙈' : '👁️' }}
+            </button>
+          </div>
+          @if (invalid('password')) {
+            <small class="field-error">Ingresa tu contraseña.</small>
+          }
+        </div>
+
+        @if (error()) {
+          <div class="login-error">{{ error() }}</div>
+        }
+
+        <button type="submit" class="btn btn-primary login-btn" [disabled]="loading()">
+          {{ loading() ? 'Ingresando…' : 'Entrar' }}
+        </button>
+      </form>
+
+      <div class="login-hint">Credenciales demo: <b>admin</b> / <b>12345</b></div>
+    </div>
+  </main>
+</div>

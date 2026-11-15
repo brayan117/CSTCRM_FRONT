@@ -1,0 +1,63 @@
+<app-page-header
+  title="Equipos satelitales"
+  subtitle="Terminales, routers y antenas instaladas o en stock."
+>
+  <button type="button" class="btn btn-primary" (click)="openNew()">+ Nuevo equipo</button>
+</app-page-header>
+
+<app-panel title="Listado de equipos">
+  <span panelActions class="pill">{{ inventory.equipos().length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="inventory.equipos()" />
+</app-panel>
+
+<app-modal
+  [open]="modalOpen()"
+  (closed)="modalOpen.set(false)"
+  title="Nuevo equipo"
+  saveLabel="Guardar equipo"
+  (save)="save()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-row">
+      <div class="field">
+        <label>Tipo *</label>
+        <select formControlName="tipo">
+          <option>Terminal satelital</option>
+          <option>Router satelital</option>
+          <option>Antena VSAT</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Marca *</label>
+        <input formControlName="marca" placeholder="Hughes HX200" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Serie *</label>
+        <input formControlName="serie" placeholder="HX200-00000" />
+      </div>
+      <div class="field">
+        <label>Estado</label>
+        <select formControlName="estado">
+          <option value="disponible">Disponible</option>
+          <option value="instalado">Instalado</option>
+          <option value="taller">En taller</option>
+          <option value="desconectado">Desconectado</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Móvil asignado</label>
+      <select formControlName="movil">
+        <option value="—">Sin asignar</option>
+        @for (movil of inventory.moviles(); track movil.id) {
+          <option [value]="movil.id">{{ movil.id }} · {{ movil.placa }}</option>
+        }
+      </select>
+    </div>
+  </form>
+</app-modal>

@@ -1,0 +1,16 @@
+@if (items().length) {
+  <div class="timeline">
+    @for (item of items(); track item.id) {
+      <div [class]="'tl-item ' + item.estado">
+        <div class="tl-date">{{ item.fecha }}</div>
+        <div class="tl-title">
+          {{ item.titulo }}
+          <app-badge [status]="item.tipo" />
+        </div>
+        <div class="tl-desc">{{ item.desc }}</div>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="empty">{{ emptyMessage() }}</div>
+}

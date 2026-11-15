@@ -1,0 +1,34 @@
+<div class="matrix-wrap">
+  <table class="matrix">
+    <thead>
+      <tr>
+        <th class="hora">Hora</th>
+        @for (day of days; track day.key) {
+          <th>
+            {{ day.label }}<br />
+            <span style="font-weight:400;font-size:10px;opacity:.8">{{ day.sub }}</span>
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody>
+      @for (row of rows(); track row.hora) {
+        <tr>
+          <th>{{ row.hora }}</th>
+          @for (day of days; track day.key) {
+            @let slot = row[day.key];
+            <td>
+              @if (slot) {
+                <div [class]="'slot ' + slot.c" (click)="onSlot(slot, row.hora, day)">
+                  <span class="t">{{ slot.t }}</span>
+                  <span style="display:block;font-weight:600">{{ slot.movil }}</span>
+                  <span style="display:block;opacity:.85">{{ slot.tecnico }}</span>
+                </div>
+              }
+            </td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

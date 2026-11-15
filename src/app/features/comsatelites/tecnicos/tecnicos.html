@@ -1,0 +1,70 @@
+<app-page-header
+  title="Técnicos disponibles"
+  subtitle="Equipo humano para mantenimiento, instalación y activación."
+>
+  <button type="button" class="btn btn-primary" (click)="openNew()">+ Nuevo técnico</button>
+</app-page-header>
+
+<div class="kgrid">
+  <app-kpi-card icon="👷" [value]="kpis().total" label="Técnicos totales" color="blue" />
+  <app-kpi-card icon="✅" [value]="kpis().disponibles" label="Disponibles" color="cyan" />
+  <app-kpi-card icon="🚗" [value]="kpis().campo" label="En campo" color="gray" />
+  <app-kpi-card icon="🏝️" [value]="kpis().vacaciones" label="En vacaciones" color="dark" />
+</div>
+
+<div class="grid3">
+  @for (tecnico of inventory.tecnicos(); track tecnico.id) {
+    <div class="panel" style="margin-bottom:0">
+      <div class="panel-h">
+        <h3><span class="bar"></span>{{ tecnico.nombre }}</h3>
+        <app-badge [status]="tecnico.estado" />
+      </div>
+      <div class="panel-b">
+        <p class="small muted"><b>ID:</b> {{ tecnico.id }}</p>
+        <p class="small muted"><b>Especialidad:</b> {{ tecnico.especialidad }}</p>
+        <p class="small muted"><b>Teléfono:</b> {{ tecnico.telefono }}</p>
+        <div class="divider"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span class="small muted">Carga actual</span>
+          <span class="pill">{{ tecnico.carga }} asignaciones</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>
+
+<app-modal
+  [open]="modalOpen()"
+  (closed)="modalOpen.set(false)"
+  title="Nuevo técnico"
+  saveLabel="Guardar técnico"
+  (save)="save()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-row">
+      <div class="field">
+        <label>Nombre *</label>
+        <input formControlName="nombre" placeholder="Nombre completo" />
+      </div>
+      <div class="field">
+        <label>Especialidad *</label>
+        <input formControlName="especialidad" placeholder="VSAT / Antenas" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Teléfono</label>
+        <input formControlName="telefono" placeholder="+57 300 000 0000" />
+      </div>
+      <div class="field">
+        <label>Estado</label>
+        <select formControlName="estado">
+          <option value="disponible">Disponible</option>
+          <option value="en campo">En campo</option>
+          <option value="vacaciones">En vacaciones</option>
+        </select>
+      </div>
+    </div>
+  </form>
+</app-modal>

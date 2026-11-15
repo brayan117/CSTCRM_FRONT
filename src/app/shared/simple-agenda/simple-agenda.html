@@ -1,0 +1,62 @@
+<app-page-header [title]="title()" [subtitle]="subtitle()">
+  <button type="button" class="btn btn-primary" (click)="openNew()">+ Nueva cita</button>
+</app-page-header>
+
+<app-panel title="Semana del 16 al 20 de noviembre de 2026">
+  <app-weekly-agenda [rows]="agenda.rows()" />
+</app-panel>
+
+<app-modal
+  [open]="modalOpen()"
+  (closed)="modalOpen.set(false)"
+  title="Nueva cita"
+  saveLabel="Guardar cita"
+  (save)="save()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-row three">
+      <div class="field">
+        <label>Día</label>
+        <select formControlName="dia">
+          <option value="lunes">Lunes</option>
+          <option value="martes">Martes</option>
+          <option value="miercoles">Miércoles</option>
+          <option value="jueves">Jueves</option>
+          <option value="viernes">Viernes</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Hora</label>
+        <select formControlName="hora">
+          <option>08:00</option>
+          <option>09:00</option>
+          <option>10:00</option>
+          <option>11:00</option>
+          <option>14:00</option>
+          <option>15:00</option>
+          <option>16:00</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Tipo de cita</label>
+        <select formControlName="tipo">
+          <option>Mantenimiento</option>
+          <option>Instalación</option>
+          <option>Activación SIM</option>
+          <option>Otro</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Referencia / cuenta *</label>
+        <input formControlName="detalle" placeholder="RAD-001 · Cliente o cuenta" />
+      </div>
+      <div class="field">
+        <label>Técnico asignado</label>
+        <input formControlName="tecnico" placeholder="Nombre del técnico" />
+      </div>
+    </div>
+  </form>
+</app-modal>

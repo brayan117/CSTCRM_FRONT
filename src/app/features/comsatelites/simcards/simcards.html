@@ -1,0 +1,68 @@
+<app-page-header
+  title="Simcards satelitales"
+  subtitle="Líneas de datos y voz asignadas a equipos móviles."
+>
+  <button type="button" class="btn btn-primary" (click)="openNew()">+ Nueva simcard</button>
+</app-page-header>
+
+<app-panel title="Listado de simcards">
+  <span panelActions class="pill">{{ inventory.simcards().length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="inventory.simcards()" />
+</app-panel>
+
+<app-modal
+  [open]="modalOpen()"
+  (closed)="modalOpen.set(false)"
+  title="Nueva simcard"
+  saveLabel="Guardar simcard"
+  (save)="save()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-row">
+      <div class="field">
+        <label>Operador *</label>
+        <select formControlName="operador">
+          <option>Claro</option>
+          <option>Movistar</option>
+          <option>Tigo</option>
+          <option>Otro</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Número *</label>
+        <input formControlName="numero" placeholder="891234500000" />
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="field">
+        <label>Plan</label>
+        <select formControlName="plan">
+          <option>Datos 5GB</option>
+          <option>Datos 10GB</option>
+          <option>Datos Ilimitado</option>
+          <option>Voz+Datos</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Estado</label>
+        <select formControlName="estado">
+          <option value="disponible">Disponible</option>
+          <option value="activa">Activa</option>
+          <option value="suspendida">Suspendida</option>
+          <option value="inactiva">Inactiva</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Móvil asignado</label>
+      <select formControlName="movil">
+        <option value="—">Sin asignar</option>
+        @for (movil of inventory.moviles(); track movil.id) {
+          <option [value]="movil.id">{{ movil.id }} · {{ movil.placa }}</option>
+        }
+      </select>
+    </div>
+  </form>
+</app-modal>

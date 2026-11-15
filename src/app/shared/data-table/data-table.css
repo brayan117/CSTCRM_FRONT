@@ -1,0 +1,15 @@
+.table-wrap {
+  overflow-x: auto;
+}
+
+.actions-cell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.prog-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 120px;
+}

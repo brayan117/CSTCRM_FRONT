@@ -1,0 +1,80 @@
+<app-page-header
+  title="Hoja de vida de vehículos"
+  subtitle="Selecciona un móvil para ver sus equipos, simcard y todos los eventos históricos."
+/>
+
+<div class="grid-veh" style="margin-bottom:18px">
+  @for (movil of inventory.moviles(); track movil.id) {
+    <app-vehicle-card
+      [movil]="movil"
+      [selected]="movil.id === selectedId()"
+      (select)="selectedId.set($event)"
+    />
+  }
+</div>
+
+@if (movil(); as m) {
+  <div class="hv-head">
+    <div>
+      <div class="hvk">Móvil</div>
+      <div class="hvv">{{ m.id }} · {{ m.placa }}</div>
+    </div>
+    <div>
+      <div class="hvk">Vehículo</div>
+      <div class="hvv">{{ m.marca }} {{ m.modelo }}</div>
+    </div>
+    <div>
+      <div class="hvk">Cliente</div>
+      <div class="hvv">{{ m.cliente }}</div>
+    </div>
+    <div>
+      <div class="hvk">Estado actual</div>
+      <div class="hvv" style="text-transform:capitalize">{{ m.estado }}</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="panel">
+      <div class="panel-h"><h3><span class="bar"></span>Equipo instalado</h3></div>
+      <div class="panel-b">
+        <table>
+          <tr>
+            <td class="small muted">ID equipo</td>
+            <td><b>{{ equipo()?.id ?? '—' }}</b></td>
+          </tr>
+          <tr><td class="small muted">Tipo</td><td>{{ equipo()?.tipo ?? '—' }}</td></tr>
+          <tr><td class="small muted">Marca</td><td>{{ equipo()?.marca ?? '—' }}</td></tr>
+          <tr><td class="small muted">Serie</td><td class="small">{{ equipo()?.serie ?? '—' }}</td></tr>
+          <tr>
+            <td class="small muted">Estado</td>
+            <td style="text-transform:capitalize">{{ equipo()?.estado ?? '—' }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-h"><h3><span class="bar"></span>Simcard asignada</h3></div>
+      <div class="panel-b">
+        <table>
+          <tr>
+            <td class="small muted">ID simcard</td>
+            <td><b>{{ sim()?.id ?? '—' }}</b></td>
+          </tr>
+          <tr><td class="small muted">Operador</td><td>{{ sim()?.operador ?? '—' }}</td></tr>
+          <tr><td class="small muted">Número</td><td class="small">{{ sim()?.numero ?? '—' }}</td></tr>
+          <tr><td class="small muted">Plan</td><td>{{ sim()?.plan ?? '—' }}</td></tr>
+          <tr>
+            <td class="small muted">Estado</td>
+            <td style="text-transform:capitalize">{{ sim()?.estado ?? '—' }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <app-panel title="Eventos históricos del móvil">
+    <span panelActions class="pill">{{ eventos().length }} eventos registrados</span>
+    <app-timeline [items]="eventos()" />
+  </app-panel>
+}

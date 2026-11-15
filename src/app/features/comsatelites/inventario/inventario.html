@@ -1,0 +1,39 @@
+<app-page-header
+  title="Inventario · Comsatelites"
+  subtitle="Resumen de móviles, equipos y simcards bajo gestión satelital."
+>
+  <a class="btn btn-ghost" routerLink="/comsatelites/moviles">Ver móviles</a>
+  <a class="btn btn-ghost" routerLink="/comsatelites/equipos">Ver equipos</a>
+  <a class="btn btn-ghost" routerLink="/comsatelites/simcards">Ver simcards</a>
+</app-page-header>
+
+<div class="kgrid">
+  <app-kpi-card icon="🚐" [value]="kpis().moviles" label="Móviles totales" color="blue" />
+  <app-kpi-card icon="✅" [value]="kpis().operativos" label="Operativos" color="cyan" />
+  <app-kpi-card icon="🔧" [value]="kpis().taller" label="En taller" color="gray" />
+  <app-kpi-card icon="⚠️" [value]="kpis().desconectados" label="Desconectados" color="dark" />
+</div>
+
+<app-panel title="Móviles registrados (vehículos)">
+  <a panelActions class="btn btn-soft" routerLink="/comsatelites/moviles">Ver detalle →</a>
+  <app-data-table
+    [columns]="movilesColumns"
+    [rows]="inventory.moviles()"
+    [clickable]="true"
+    (rowClick)="verMovil($event)"
+  />
+</app-panel>
+
+<div class="grid2">
+  <app-panel title="Equipos">
+    <a panelActions class="btn btn-soft" routerLink="/comsatelites/equipos">Ver →</a>
+    <app-data-table [columns]="equiposColumns" [rows]="equiposRows()" />
+  </app-panel>
+
+  <app-panel title="Simcards">
+    <a panelActions class="btn btn-soft" routerLink="/comsatelites/simcards">Ver →</a>
+    <app-data-table [columns]="simColumns" [rows]="simRows()" />
+  </app-panel>
+</div>
+
+<app-client-report />

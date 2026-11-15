@@ -1,0 +1,9 @@
+<app-page-header
+  title="Operaciones · Comradios"
+  subtitle="Registro de mantenimiento, programación de canales y reporte de radios fuera de servicio."
+/>
+
+<app-panel title="Registro de operaciones">
+  <span panelActions class="pill">{{ catalog.radioOperaciones.length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="rows" />
+</app-panel>

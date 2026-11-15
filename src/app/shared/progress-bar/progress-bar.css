@@ -1,0 +1,23 @@
+.prog {
+  height: 8px;
+  background: #eef1f6;
+  border-radius: 6px;
+  overflow: hidden;
+  min-width: 120px;
+  flex: 1;
+}
+
+.prog > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--c2), var(--c1));
+  border-radius: 6px;
+}
+
+.prog.warn > span {
+  background: linear-gradient(90deg, #f3c969, #e0a32e);
+}
+
+.prog.bad > span {
+  background: linear-gradient(90deg, #e88b8b, #d24b4b);
+}

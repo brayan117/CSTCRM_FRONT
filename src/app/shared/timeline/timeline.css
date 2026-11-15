@@ -1,0 +1,69 @@
+.timeline {
+  position: relative;
+  padding-left: 26px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: var(--line);
+}
+
+.tl-item {
+  position: relative;
+  padding-bottom: 18px;
+}
+
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -23px;
+  top: 3px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--c1);
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px var(--c1);
+}
+
+.tl-item.bad::before {
+  background: var(--bad);
+  box-shadow: 0 0 0 2px var(--bad);
+}
+
+.tl-item.warn::before {
+  background: var(--warn);
+  box-shadow: 0 0 0 2px var(--warn);
+}
+
+.tl-item.ok::before {
+  background: var(--ok);
+  box-shadow: 0 0 0 2px var(--ok);
+}
+
+.tl-item .tl-date {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.tl-item .tl-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--c3);
+  margin: 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tl-item .tl-desc {
+  font-size: 12.5px;
+  color: var(--muted);
+}

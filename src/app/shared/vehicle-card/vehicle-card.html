@@ -1,0 +1,10 @@
+<div class="veh-card" [class.sel]="selected()" (click)="select.emit(movil().id)">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start">
+    <div>
+      <b style="color:var(--c3)">{{ movil().id }}</b>
+      <div class="small muted">{{ movil().placa }} · {{ movil().tipo }}</div>
+      <div class="small" style="margin-top:4px">{{ movil().cliente }}</div>
+    </div>
+    <app-badge [status]="movil().estado" />
+  </div>
+</div>
