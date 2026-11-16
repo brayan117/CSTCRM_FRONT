@@ -1,0 +1,9 @@
+<app-page-header
+  title="Inventario"
+  subtitle="Móviles asignados a tu empresa."
+/>
+
+<app-panel title="Mis móviles">
+  <span panelActions class="pill">{{ misMoviles().length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="misMoviles()" />
+</app-panel>

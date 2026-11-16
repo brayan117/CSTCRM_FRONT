@@ -1,0 +1,24 @@
+<app-page-header
+  title="Asignaciones"
+  subtitle="Operaciones asignadas a tu usuario."
+/>
+
+<app-panel title="Sin aceptar">
+  <span panelActions class="pill">{{ sinAceptar().length }} pendientes</span>
+  <app-data-table [columns]="columns" [rows]="sinAceptar()" />
+  <div class="actions">
+    @for (o of sinAceptar(); track o.id) {
+      <button type="button" class="btn btn-primary" (click)="aceptar(o.id)">Aceptar {{ o.id }}</button>
+    }
+  </div>
+</app-panel>
+
+<app-panel title="En proceso">
+  <span panelActions class="pill">{{ enProceso().length }} activas</span>
+  <app-data-table [columns]="columns" [rows]="enProceso()" />
+  <div class="actions">
+    @for (o of enProceso(); track o.id) {
+      <button type="button" class="btn btn-primary" (click)="finalizar(o.id)">Terminar {{ o.id }}</button>
+    }
+  </div>
+</app-panel>

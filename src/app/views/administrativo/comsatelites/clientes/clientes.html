@@ -1,0 +1,9 @@
+<app-page-header
+  title="Clientes"
+  subtitle="Clientes con móviles asignados y sus operaciones."
+/>
+
+<app-panel title="Listado de clientes">
+  <span panelActions class="pill">{{ clientes().length }} clientes</span>
+  <app-data-table [columns]="columns" [rows]="clientes()" />
+</app-panel>

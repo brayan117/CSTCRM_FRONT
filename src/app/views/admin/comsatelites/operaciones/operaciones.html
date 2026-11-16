@@ -1,0 +1,165 @@
+<app-page-header
+  title="Operaciones · Comsatelites"
+  subtitle="Asigna operaciones a técnicos, haz seguimiento a las activas y consulta el historial."
+/>
+
+<div class="kgrid">
+  <app-kpi-card icon="📋" [value]="kpis().activas" label="Operaciones activas" color="blue" />
+  <app-kpi-card icon="⏳" [value]="kpis().enProceso" label="En proceso" color="cyan" />
+  <app-kpi-card icon="🅿️" [value]="kpis().pendientes" label="Pendientes" color="gray" />
+  <app-kpi-card icon="📚" [value]="kpis().historial" label="En historial" color="dark" />
+</div>
+
+<app-tabs [tabs]="tabs" [active]="tab()" (activeChange)="tab.set($event)" />
+
+@switch (tab()) {
+  @case ('activas') {
+    <app-panel title="Operaciones activas y seguimiento">
+      <span panelActions class="pill">{{ operations.operaciones().length }} activas</span>
+      <app-data-table
+        [columns]="activasColumns"
+        [rows]="operations.operaciones()"
+        [actions]="acciones"
+        (actionClick)="abrirSeguimiento($event)"
+      />
+      <p class="small muted" style="margin-top:12px">
+        El seguimiento permite registrar avances, cambiar el estado de la operación y cerrarla
+        al finalizar.
+      </p>
+    </app-panel>
+  }
+
+  @case ('crear') {
+    <app-panel title="Crear / asignar operación">
+      <form [formGroup]="crearForm" (ngSubmit)="crearOperacion()">
+        <div class="form-row three">
+          <div class="field">
+            <label>Tipo de operación *</label>
+            <select formControlName="tipo">
+              <option>Mantenimiento</option>
+              <option>Instalación</option>
+              <option>Activación SIM</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Técnico responsable *</label>
+            <select formControlName="tecnico">
+              @for (tecnico of inventory.tecnicos(); track tecnico.id) {
+                @if (tecnico.estado !== 'vacaciones') {
+                  <option [value]="tecnico.nombre">
+                    {{ tecnico.nombre }} · {{ tecnico.especialidad }} ({{ tecnico.estado }})
+                  </option>
+                }
+              }
+            </select>
+          </div>
+          <div class="field">
+            <label>Móvil (vehículo) *</label>
+            <select formControlName="movil">
+              @for (movil of inventory.moviles(); track movil.id) {
+                <option [value]="movil.id">
+                  {{ movil.id }} · {{ movil.placa }} — {{ movil.cliente }}
+                </option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row three">
+          <div class="field">
+            <label>Fecha programada</label>
+            <input type="date" formControlName="fecha" />
+          </div>
+          <div class="field">
+            <label>Hora</label>
+            <input type="time" formControlName="hora" />
+          </div>
+          <div class="field">
+            <label>Prioridad</label>
+            <select formControlName="prioridad">
+              <option>Normal</option>
+              <option>Alta</option>
+              <option>Urgente</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field" style="margin-bottom:14px">
+          <label>Observaciones de la asignación</label>
+          <textarea
+            rows="2"
+            formControlName="obs"
+            placeholder="Describe el alcance de la operación..."
+          ></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Asignar operación</button>
+          <button type="button" class="btn btn-ghost" (click)="limpiarCrear()">Limpiar</button>
+        </div>
+      </form>
+    </app-panel>
+  }
+
+  @case ('historial') {
+    <app-panel title="Historial de operaciones">
+      <span panelActions class="pill">{{ operations.historial().length }} registros</span>
+      <app-data-table [columns]="historialColumns" [rows]="historialRows()" />
+    </app-panel>
+  }
+}
+
+<app-modal
+  [open]="seguimientoOpen()"
+  (closed)="seguimientoOpen.set(false)"
+  [title]="'Seguimiento · ' + (selected()?.id ?? '')"
+  saveLabel="Guardar seguimiento"
+  (save)="guardarSeguimiento()"
+>
+  <form [formGroup]="seguimientoForm" (ngSubmit)="guardarSeguimiento()">
+    <div class="form-row three">
+      <div class="field">
+        <label>Operación</label>
+        <input [value]="(selected()?.id ?? '') + ' — ' + (selected()?.tipo ?? '')" disabled />
+      </div>
+      <div class="field">
+        <label>Móvil</label>
+        <input [value]="selected()?.movil ?? ''" disabled />
+      </div>
+      <div class="field">
+        <label>Técnico asignado</label>
+        <select formControlName="tecnico">
+          <option value="">Sin asignar</option>
+          @for (tecnico of inventory.tecnicos(); track tecnico.id) {
+            @if (tecnico.estado !== 'vacaciones') {
+              <option [value]="tecnico.nombre">
+                {{ tecnico.nombre }} · {{ tecnico.especialidad }}
+              </option>
+            }
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row two">
+      <div class="field">
+        <label>Inicio</label>
+        <input [value]="selected()?.inicio ?? ''" disabled />
+      </div>
+      <div class="field">
+        <label>Estado</label>
+        <select formControlName="estado">
+          <option value="pendiente">Pendiente</option>
+          <option value="en proceso">En proceso</option>
+          <option value="completado">Completado</option>
+          <option value="cancelado">Cancelado</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Observación de seguimiento</label>
+      <textarea rows="3" formControlName="obs"></textarea>
+    </div>
+  </form>
+</app-modal>

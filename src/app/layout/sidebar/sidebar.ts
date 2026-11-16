@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { NAV_SECTIONS } from '../../core/navigation';
+import { getNavForRole } from '../../core/navigation';
+import { Auth } from '../../core/services/auth';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,12 +14,13 @@ import { NAV_SECTIONS } from '../../core/navigation';
 export class Sidebar {
   readonly open = input(false);
   readonly navigate = output<void>();
-  readonly sections = NAV_SECTIONS;
+  private readonly auth = inject(Auth);
+  readonly sections = computed(() => getNavForRole(this.auth.role()));
 
-  private readonly openSections = signal<Record<string, boolean>>({ csat: true });
+  private readonly openSections = signal<Record<string, boolean>>({ csat: true, crad: true, cstr: true });
 
   isOpen(id: string): boolean {
-    return !!this.openSections()[id];
+    return this.openSections()[id] !== false;
   }
 
   toggle(id: string): void {

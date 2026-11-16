@@ -19,10 +19,6 @@
             {{ group.noReportan }} no reportan
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:10px;min-width:200px">
-          <app-progress-bar [value]="group.pct" />
-          <span class="small" style="min-width:34px;font-weight:600">{{ group.pct }}%</span>
-        </div>
       </div>
       <app-data-table [columns]="columns" [rows]="rowsFor(group.moviles)" />
     </div>

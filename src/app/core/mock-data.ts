@@ -433,6 +433,16 @@ export const OPERACIONES_ACTIVAS: Operacion[] = [
     avance: 30,
     obs: 'Mantenimiento preventivo. Revisión general.',
   },
+  {
+    id: 'OP-3005',
+    tipo: 'Revisión',
+    movil: 'MOV-001',
+    tecnico: 'Carlos Mendoza',
+    inicio: '2026-11-16 10:00',
+    estado: 'pendiente',
+    avance: 0,
+    obs: 'Revisión de señal VSAT solicitada por el cliente.',
+  },
 ];
 
 export const HISTORIAL: HistorialItem[] = [

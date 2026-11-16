@@ -8,19 +8,25 @@ export class Auth {
 
   readonly user = this.state.asReadonly();
   readonly isAuthenticated = computed(() => this.state() !== null);
+  readonly role = computed(() => this.state()?.rol ?? '');
 
   login(username: string, password: string): boolean {
-    if (username.trim().toLowerCase() === 'admin' && password === '12345') {
-      const user: Usuario = {
-        username: 'admin',
-        nombre: 'Administrador',
-        rol: 'Coordinador de operaciones',
-      };
-      this.state.set(user);
-      this.persist(user);
-      return true;
+    const u = username.trim().toLowerCase();
+    if (password !== '12345') return false;
+    let user: Usuario | null = null;
+    if (u === 'admin') {
+      user = { username: 'admin', nombre: 'Administrador', rol: 'admin' };
+    } else if (u === 'cliente') {
+      user = { username: 'cliente', nombre: 'Minería Andina S.A.', rol: 'cliente' };
+    } else if (u === 'tecnico') {
+      user = { username: 'tecnico', nombre: 'Carlos Mendoza', rol: 'tecnico' };
+    } else if (u === 'administrativo') {
+      user = { username: 'administrativo', nombre: 'Administrativo', rol: 'administrativo' };
     }
-    return false;
+    if (!user) return false;
+    this.state.set(user);
+    this.persist(user);
+    return true;
   }
 
   logout(): void {
@@ -43,7 +49,9 @@ export class Auth {
   private restore(): Usuario | null {
     try {
       const raw = localStorage.getItem(this.storageKey);
-      return raw ? (JSON.parse(raw) as Usuario) : null;
+      if (!raw) return null;
+      const user = JSON.parse(raw) as Usuario;
+      return ['admin', 'cliente', 'tecnico', 'administrativo'].includes(user.rol) ? user : null;
     } catch {
       return null;
     }

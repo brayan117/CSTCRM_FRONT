@@ -41,14 +41,6 @@
                   <app-badge [status]="asText(row[col.key])" [variant]="col.variant ?? 'blue'" />
                 </td>
               }
-              @case ('progress') {
-                <td>
-                  <div class="prog-cell">
-                    <app-progress-bar [value]="asNum(row[col.key])" />
-                    <span class="small">{{ asNum(row[col.key]) }}%</span>
-                  </div>
-                </td>
-              }
               @default {
                 <td>{{ asText(row[col.key]) }}</td>
               }

@@ -5,21 +5,19 @@ import { Toast } from '../../core/services/toast';
 import { Badge } from '../badge/badge';
 import { DataTable } from '../data-table/data-table';
 import { Panel } from '../panel/panel';
-import { ProgressBar } from '../progress-bar/progress-bar';
 
 interface ClientGroup {
   cliente: string;
   moviles: Movil[];
   reportan: number;
   noReportan: number;
-  pct: number;
 }
 
 @Component({
   selector: 'app-client-report',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Panel, DataTable, ProgressBar, Badge],
+  imports: [Panel, DataTable, Badge],
   templateUrl: './client-report.html',
   styleUrl: './client-report.css',
 })
@@ -51,7 +49,6 @@ export class ClientReport {
         moviles,
         reportan,
         noReportan: moviles.length - reportan,
-        pct: Math.round((reportan / moviles.length) * 100),
       };
     });
   });

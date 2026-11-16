@@ -1,0 +1,52 @@
+<app-page-header
+  title="Operaciones"
+  subtitle="Operaciones realizadas sobre tus móviles."
+>
+  <button type="button" class="btn btn-primary" (click)="openNew()">+ Crear operación</button>
+</app-page-header>
+
+<app-panel title="Mis operaciones">
+  <span panelActions class="pill">{{ misOperaciones().length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="misOperaciones()" />
+</app-panel>
+
+<app-panel title="Operaciones completadas">
+  <span panelActions class="pill">{{ misHistorial().length }} registros</span>
+  <app-data-table [columns]="historialColumns" [rows]="misHistorial()" />
+</app-panel>
+
+<app-modal
+  [open]="modalOpen()"
+  (closed)="modalOpen.set(false)"
+  title="Crear operación"
+  saveLabel="Crear"
+  (save)="save()"
+>
+  <form [formGroup]="form" (ngSubmit)="save()">
+    <div class="form-row">
+      <div class="field">
+        <label>Tipo de operación *</label>
+        <select formControlName="tipo">
+          @for (t of tipos; track t) {
+            <option [value]="t">{{ t }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label>Móvil *</label>
+        <select formControlName="movil">
+          <option value="">Selecciona…</option>
+          @for (m of misMoviles(); track m.id) {
+            <option [value]="m.id">{{ m.id }} · {{ m.placa }}</option>
+          }
+        </select>
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label>Observación</label>
+        <input formControlName="obs" placeholder="Detalle para el técnico" />
+      </div>
+    </div>
+  </form>
+</app-modal>

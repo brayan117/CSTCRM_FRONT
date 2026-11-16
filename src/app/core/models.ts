@@ -138,7 +138,7 @@ export interface StreamOperacion extends Row {
 export interface TableColumn {
   key: string;
   label: string;
-  type?: 'text' | 'strong' | 'muted' | 'badge' | 'chip' | 'progress';
+  type?: 'text' | 'strong' | 'muted' | 'badge' | 'chip';
   variant?: BadgeVariant;
   align?: 'left' | 'center' | 'right';
   width?: string;

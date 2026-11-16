@@ -1,0 +1,9 @@
+<app-page-header
+  title="Historial de operaciones"
+  subtitle="Operaciones completadas."
+/>
+
+<app-panel title="Historial">
+  <span panelActions class="pill">{{ rows().length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="rows()" />
+</app-panel>

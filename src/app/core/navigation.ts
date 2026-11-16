@@ -63,6 +63,89 @@ export const NAV_SECTIONS: NavSection[] = [
   },
 ];
 
+const CLIENTE_SECTIONS: NavSection[] = [
+  {
+    id: 'csat',
+    label: 'Comsatelites',
+    icon: '🛰️',
+    tag: 'Servicio',
+    items: [
+      { label: 'Inventario', route: '/cliente/inventario' },
+      { label: 'Operaciones', route: '/cliente/operaciones' },
+    ],
+  },
+  {
+    id: 'crad',
+    label: 'Comradios',
+    icon: '📻',
+    tag: 'Servicio',
+    items: [],
+  },
+  {
+    id: 'cstr',
+    label: 'Comstreaming',
+    icon: '📺',
+    tag: 'Servicio',
+    items: [],
+  },
+];
+
+const ADMINISTRATIVO_SECTIONS: NavSection[] = [
+  {
+    id: 'csat',
+    label: 'Comsatelites',
+    icon: '🛰️',
+    tag: 'Servicio',
+    items: [
+      { label: 'Clientes', route: '/administrativo/comsatelites/clientes' },
+      { label: 'Operaciones', route: '/administrativo/comsatelites/operaciones' },
+      { label: 'Facturación', route: '/administrativo/comsatelites/facturacion' },
+      { label: 'Historial de operaciones', route: '/administrativo/comsatelites/historial' },
+    ],
+  },
+  {
+    id: 'crad',
+    label: 'Comradios',
+    icon: '📻',
+    tag: 'Servicio',
+    items: [],
+  },
+  {
+    id: 'cstr',
+    label: 'Comstreaming',
+    icon: '📺',
+    tag: 'Servicio',
+    items: [],
+  },
+];
+
+const TECNICO_SECTIONS: NavSection[] = [
+  {
+    id: 'tecnico',
+    label: 'Portal Técnico',
+    icon: '🔧',
+    tag: 'Rol',
+    items: [
+      { label: 'Asignaciones', route: '/tecnico/asignaciones' },
+      { label: 'Perfil', route: '/tecnico/perfil' },
+    ],
+  },
+];
+
+export function getNavForRole(role: string | undefined | null): NavSection[] {
+  if (role === 'cliente') return CLIENTE_SECTIONS;
+  if (role === 'tecnico') return TECNICO_SECTIONS;
+  if (role === 'administrativo') return ADMINISTRATIVO_SECTIONS;
+  return NAV_SECTIONS;
+}
+
+export function homeRouteForRole(role: string | undefined | null): string {
+  if (role === 'cliente') return '/cliente/inventario';
+  if (role === 'tecnico') return '/tecnico/asignaciones';
+  if (role === 'administrativo') return '/administrativo/comsatelites/clientes';
+  return '/comsatelites/inventario';
+}
+
 export interface Breadcrumb {
   section: string;
   module: string;
@@ -70,7 +153,12 @@ export interface Breadcrumb {
 
 export function findBreadcrumb(url: string): Breadcrumb {
   const clean = url.split('?')[0];
-  for (const section of NAV_SECTIONS) {
+  for (const section of [
+    ...NAV_SECTIONS,
+    ...CLIENTE_SECTIONS,
+    ...TECNICO_SECTIONS,
+    ...ADMINISTRATIVO_SECTIONS,
+  ]) {
     for (const item of section.items) {
       if (item.route === clean) {
         return { section: section.label, module: item.label };

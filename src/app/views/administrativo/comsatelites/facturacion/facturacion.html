@@ -1,0 +1,16 @@
+<app-page-header
+  title="Facturación"
+  subtitle="Operaciones completadas pendientes de facturar."
+/>
+
+<app-panel title="Operaciones facturables">
+  <span panelActions class="pill">{{ facturables().length }} registros</span>
+  <app-data-table [columns]="columns" [rows]="facturables()" />
+  <div class="actions">
+    @for (h of facturables(); track h.fecha + h.movil) {
+      <button type="button" class="btn btn-primary" (click)="facturar(h.movil, h.fecha)">
+        Facturar {{ h.movil }}
+      </button>
+    }
+  </div>
+</app-panel>

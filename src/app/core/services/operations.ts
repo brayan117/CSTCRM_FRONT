@@ -52,7 +52,10 @@ export class Operations {
     return operacion;
   }
 
-  updateOperacion(id: string, changes: { avance?: number; estado?: string; obs?: string }): void {
+  updateOperacion(
+    id: string,
+    changes: { avance?: number; estado?: string; obs?: string; tecnico?: string },
+  ): void {
     const current = this.state().operaciones.find((o) => o.id === id);
     if (!current) {
       return;

@@ -1,0 +1,15 @@
+<app-page-header title="Perfil" subtitle="Datos del técnico." />
+
+<app-panel title="Información personal">
+  <div class="profile">
+    <p><b>Usuario:</b> {{ auth.user()?.username }}</p>
+    <p><b>Nombre:</b> {{ auth.user()?.nombre }}</p>
+    <p><b>Rol:</b> {{ auth.user()?.rol }}</p>
+    @if (tecnico(); as t) {
+      <p><b>Especialidad:</b> {{ t.especialidad }}</p>
+      <p><b>Estado:</b> {{ t.estado }}</p>
+      <p><b>Carga actual:</b> {{ t.carga }} operaciones</p>
+      <p><b>Teléfono:</b> {{ t.telefono }}</p>
+    }
+  </div>
+</app-panel>
