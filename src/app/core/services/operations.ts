@@ -62,6 +62,7 @@ export class Operations {
     }
 
     if (changes.estado === 'completado') {
+      const yaCompletada = current.estado === 'completado';
       const updated: Operacion = {
         ...current,
         ...changes,
@@ -77,8 +78,8 @@ export class Operations {
         obs: updated.obs,
       };
       this.state.update((s) => ({
-        operaciones: s.operaciones.filter((o) => o.id !== id),
-        historial: [registro, ...s.historial],
+        operaciones: s.operaciones.map((o) => (o.id === id ? updated : o)),
+        historial: yaCompletada ? s.historial : [registro, ...s.historial],
       }));
       this.save();
       return;

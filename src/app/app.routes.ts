@@ -126,6 +126,15 @@ export const routes: Routes = [
           import('./views/admin/comstreaming/agenda/agenda').then((m) => m.ComstreamingAgenda),
       },
 
+      // ---------- ADMIN · ADMINISTRACIÓN ----------
+      {
+        path: 'administracion',
+        canActivate: [roleGuard(['admin'])],
+        title: 'Administración',
+        loadComponent: () =>
+          import('./views/admin/administracion/administracion').then((m) => m.Administracion),
+      },
+
       // ---------- ADMINISTRATIVO ----------
       { path: 'administrativo', pathMatch: 'full', redirectTo: 'administrativo/comsatelites/clientes' },
       {

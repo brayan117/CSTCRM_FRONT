@@ -1,0 +1,75 @@
+<app-page-header
+  title="Administración"
+  subtitle="Gestión de usuarios del sistema y auditoría de accesos y eventos."
+>
+  @if (tab() === 'usuarios') {
+    <button type="button" class="btn btn-primary" (click)="abrirNuevo()">+ Nuevo usuario</button>
+  }
+</app-page-header>
+
+<app-tabs [tabs]="tabs" [active]="tab()" (activeChange)="tab.set($event)" />
+
+@switch (tab()) {
+  @case ('usuarios') {
+    <app-panel title="Usuarios del sistema">
+      <span panelActions class="pill">{{ userRows().length }} usuarios</span>
+      <app-data-table
+        [columns]="userColumns"
+        [rows]="userRows()"
+        [actions]="userActions"
+        (actionClick)="onUserAction($event)"
+      />
+    </app-panel>
+  }
+
+  @case ('auditoria') {
+    <app-panel title="Auditoría del sistema">
+      <span panelActions class="pill">{{ auditRows().length }} eventos</span>
+      <app-data-table [columns]="auditColumns" [rows]="auditRows()" />
+      <p class="small muted" style="margin-top:12px">
+        Se registran inicios y cierres de sesión (con IP de origen), intentos fallidos y las
+        acciones de administración sobre usuarios.
+      </p>
+    </app-panel>
+  }
+}
+
+<app-modal
+  [open]="modalOpen()"
+  (closed)="modalOpen.set(false)"
+  [title]="editing() ? 'Editar usuario' : 'Nuevo usuario'"
+  saveLabel="Guardar"
+  (save)="guardar()"
+>
+  <form [formGroup]="form" (ngSubmit)="guardar()">
+    <div class="form-row two">
+      <div class="field">
+        <label>Usuario *</label>
+        <input formControlName="username" placeholder="ej. maria.gomez" />
+      </div>
+      <div class="field">
+        <label>Nombre completo *</label>
+        <input formControlName="nombre" placeholder="Nombre y apellido" />
+      </div>
+    </div>
+    <div class="form-row two">
+      <div class="field">
+        <label>Rol *</label>
+        <select formControlName="rol">
+          @for (rol of roles; track rol) {
+            <option [value]="rol">{{ rol }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label>Contraseña *</label>
+        <input type="password" formControlName="password" />
+      </div>
+    </div>
+    <div class="field">
+      <label class="check">
+        <input type="checkbox" formControlName="activo" /> Usuario activo
+      </label>
+    </div>
+  </form>
+</app-modal>

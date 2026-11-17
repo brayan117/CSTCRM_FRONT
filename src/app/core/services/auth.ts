@@ -1,9 +1,13 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { Usuario } from '../models';
+import { Audit } from './audit';
+import { Users } from './users';
 
 @Injectable({ providedIn: 'root' })
 export class Auth {
   private readonly storageKey = 'comsatech.session';
+  private readonly users = inject(Users);
+  private readonly audit = inject(Audit);
   private readonly state = signal<Usuario | null>(this.restore());
 
   readonly user = this.state.asReadonly();
@@ -11,25 +15,32 @@ export class Auth {
   readonly role = computed(() => this.state()?.rol ?? '');
 
   login(username: string, password: string): boolean {
-    const u = username.trim().toLowerCase();
-    if (password !== '12345') return false;
-    let user: Usuario | null = null;
-    if (u === 'admin') {
-      user = { username: 'admin', nombre: 'Administrador', rol: 'admin' };
-    } else if (u === 'cliente') {
-      user = { username: 'cliente', nombre: 'Minería Andina S.A.', rol: 'cliente' };
-    } else if (u === 'tecnico') {
-      user = { username: 'tecnico', nombre: 'Carlos Mendoza', rol: 'tecnico' };
-    } else if (u === 'administrativo') {
-      user = { username: 'administrativo', nombre: 'Administrativo', rol: 'administrativo' };
+    const cuenta = this.users.findByUsername(username);
+    if (!cuenta || !cuenta.activo || cuenta.password !== password) {
+      this.audit.registrar('Inicio de sesión fallido', `Usuario: ${username.trim()}`);
+      return false;
     }
-    if (!user) return false;
+    const user: Usuario = {
+      username: cuenta.username,
+      nombre: cuenta.nombre,
+      rol: cuenta.rol,
+    };
     this.state.set(user);
     this.persist(user);
+    this.audit.registrar(
+      'Inicio de sesión',
+      `Usuario: ${cuenta.username} · Rol: ${cuenta.rol}`,
+      cuenta.nombre,
+      cuenta.rol,
+    );
     return true;
   }
 
   logout(): void {
+    const user = this.state();
+    if (user) {
+      this.audit.registrar('Cierre de sesión', '', user.nombre, user.rol);
+    }
     this.state.set(null);
     try {
       localStorage.removeItem(this.storageKey);

@@ -61,6 +61,13 @@ export const NAV_SECTIONS: NavSection[] = [
       { label: 'Agenda', route: '/comstreaming/agenda' },
     ],
   },
+  {
+    id: 'sistema',
+    label: 'Administración',
+    icon: '🛡️',
+    tag: 'Sistema',
+    items: [{ label: 'Usuarios y auditoría', route: '/administracion' }],
+  },
 ];
 
 const CLIENTE_SECTIONS: NavSection[] = [
