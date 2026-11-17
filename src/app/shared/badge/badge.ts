@@ -20,6 +20,8 @@ const STATUS_MAP: Record<string, { variant: BadgeVariant; label: string }> = {
   'en campo': { variant: 'blue', label: 'En campo' },
   online: { variant: 'ok', label: 'Online' },
   completado: { variant: 'ok', label: 'Completado' },
+  facturada: { variant: 'ok', label: 'Facturada' },
+  facturado: { variant: 'ok', label: 'Facturado' },
   completada: { variant: 'ok', label: 'Completada' },
   mantenimiento: { variant: 'blue', label: 'Mantenimiento' },
   instalación: { variant: 'ok', label: 'Instalación' },

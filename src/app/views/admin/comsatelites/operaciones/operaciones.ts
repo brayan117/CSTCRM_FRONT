@@ -64,6 +64,10 @@ export class ComsatelitesOperaciones {
 
   readonly acciones: TableAction[] = [{ label: 'Seguimiento →' }];
 
+  readonly operacionesActivas = computed(() =>
+    this.operations.operaciones().filter((o) => o.estado !== 'completado'),
+  );
+
   readonly historialRows = computed<Row[]>(() =>
     this.operations.historial().map((item) => ({
       ...item,

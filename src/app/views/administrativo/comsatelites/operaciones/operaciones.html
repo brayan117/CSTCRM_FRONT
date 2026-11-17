@@ -15,10 +15,10 @@
 @switch (tab()) {
   @case ('activas') {
     <app-panel title="Operaciones activas y seguimiento">
-      <span panelActions class="pill">{{ operations.operaciones().length }} activas</span>
+      <span panelActions class="pill">{{ operacionesActivas().length }} activas</span>
       <app-data-table
         [columns]="activasColumns"
-        [rows]="operations.operaciones()"
+        [rows]="operacionesActivas()"
         [actions]="acciones"
         (actionClick)="abrirSeguimiento($event)"
       />

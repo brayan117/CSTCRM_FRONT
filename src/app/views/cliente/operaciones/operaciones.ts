@@ -44,7 +44,9 @@ export class ClienteOperaciones {
 
   readonly misOperaciones = computed(() => {
     const ids = new Set(this.misMoviles().map((m) => m.id));
-    return this.operations.operaciones().filter((o) => ids.has(String(o.movil)));
+    return this.operations
+      .operaciones()
+      .filter((o) => ids.has(String(o.movil)) && o.estado !== 'completado');
   });
 
   readonly misHistorial = computed(() => {

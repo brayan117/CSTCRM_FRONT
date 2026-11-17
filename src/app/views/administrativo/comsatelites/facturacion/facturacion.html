@@ -3,14 +3,20 @@
   subtitle="Operaciones completadas pendientes de facturar."
 />
 
-<app-panel title="Operaciones facturables">
-  <span panelActions class="pill">{{ facturables().length }} registros</span>
-  <app-data-table [columns]="columns" [rows]="facturables()" />
+<app-panel title="Operaciones por facturar">
+  <span panelActions class="pill">{{ pendientes().length }} pendientes</span>
+  <app-data-table [columns]="columns" [rows]="rows()" />
   <div class="actions">
-    @for (h of facturables(); track h.fecha + h.movil) {
-      <button type="button" class="btn btn-primary" (click)="facturar(h.movil, h.fecha)">
-        Facturar {{ h.movil }}
-      </button>
+    @for (row of rows(); track $index) {
+      @if (esPendiente(row)) {
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="facturar(row)"
+        >
+          Facturar {{ row['opId'] }}
+        </button>
+      }
     }
   </div>
 </app-panel>

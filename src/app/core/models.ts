@@ -63,6 +63,7 @@ export interface Operacion extends Row {
 }
 
 export interface HistorialItem extends Row {
+  id?: string;
   fecha: string;
   tipo: string;
   movil: string;

@@ -25,7 +25,7 @@ export class Operations {
   readonly kpis = computed(() => {
     const operaciones = this.state().operaciones;
     return {
-      activas: operaciones.length,
+      activas: operaciones.filter((o) => o.estado !== 'completado').length,
       enProceso: operaciones.filter((o) => o.estado === 'en proceso').length,
       pendientes: operaciones.filter((o) => o.estado === 'pendiente').length,
       historial: this.state().historial.length,
@@ -62,7 +62,6 @@ export class Operations {
     }
 
     if (changes.estado === 'completado') {
-      const yaCompletada = current.estado === 'completado';
       const updated: Operacion = {
         ...current,
         ...changes,
@@ -70,6 +69,7 @@ export class Operations {
         estado: 'completado',
       };
       const registro: HistorialItem = {
+        id: updated.id,
         fecha: new Date().toISOString().slice(0, 10),
         tipo: updated.tipo,
         movil: updated.movil,
@@ -79,7 +79,7 @@ export class Operations {
       };
       this.state.update((s) => ({
         operaciones: s.operaciones.map((o) => (o.id === id ? updated : o)),
-        historial: yaCompletada ? s.historial : [registro, ...s.historial],
+        historial: [registro, ...s.historial],
       }));
       this.save();
       return;

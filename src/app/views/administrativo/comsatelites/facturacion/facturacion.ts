@@ -1,11 +1,14 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { PageHeader } from '../../../../shared/page-header/page-header';
 import { Panel } from '../../../../shared/panel/panel';
 import { DataTable } from '../../../../shared/data-table/data-table';
 import { Toast } from '../../../../core/services/toast';
-import { TableColumn } from '../../../../core/models';
+import { Row, TableColumn } from '../../../../core/models';
 import { Operations } from '../../../../core/services/operations';
 import { Inventory } from '../../../../core/services/inventory';
+import { loadState, saveState } from '../../../../core/storage';
+
+const FACTURADAS_KEY = 'comsatech.facturadas.v1';
 
 @Component({
   selector: 'app-admin-facturacion',
@@ -20,28 +23,59 @@ export class AdminFacturacion {
   readonly inventory = inject(Inventory);
   private readonly toast = inject(Toast);
 
-  readonly facturables = computed(() =>
+  private readonly facturadasState = signal<string[]>(
+    loadState<string[]>(FACTURADAS_KEY, []),
+  );
+
+  private clave(h: { id?: string; movil: string; fecha: string; tipo: string }): string {
+    return h.id ?? `${h.movil}-${h.fecha}-${h.tipo}`;
+  }
+
+  readonly rows = computed<Row[]>(() =>
     this.operations
       .historial()
       .filter((h) => h.resultado === 'Completado')
-      .map((h) => ({ ...h, cliente: this.clienteDe(h.movil) })),
+      .map((h) => ({
+        ...h,
+        opId: h.id ?? '—',
+        cliente: this.clienteDe(h.movil),
+        factura: this.facturadasState().includes(this.clave(h)) ? 'facturada' : 'pendiente',
+      })),
   );
 
+  readonly pendientes = computed(() => this.rows().filter((r) => r['factura'] === 'pendiente'));
+
   readonly columns: TableColumn[] = [
+    { key: 'opId', label: 'Operación', type: 'strong' },
     { key: 'fecha', label: 'Fecha', type: 'muted' },
     { key: 'tipo', label: 'Tipo', type: 'badge' },
     { key: 'movil', label: 'Móvil', type: 'chip', variant: 'blue' },
     { key: 'cliente', label: 'Cliente' },
     { key: 'tecnico', label: 'Técnico' },
-    { key: 'resultado', label: 'Resultado', type: 'badge' },
-    { key: 'obs', label: 'Observación', type: 'muted' },
+    { key: 'factura', label: 'Factura', type: 'badge' },
   ];
 
   clienteDe(movil: string): string {
     return this.inventory.movilById(movil)?.cliente ?? '—';
   }
 
-  facturar(movil: string, fecha: string): void {
-    this.toast.success(`Factura generada para ${movil} (${fecha}) (demo).`);
+  esPendiente(row: Row): boolean {
+    return row['factura'] === 'pendiente';
+  }
+
+  facturar(row: Row): void {
+    const h = row as { movil: string; fecha: string; tipo: string; id?: string };
+    const clave = this.clave(h);
+    if (this.facturadasState().includes(clave)) {
+      return;
+    }
+    this.facturadasState.update((list) => {
+      const next = [...list, clave];
+      saveState(FACTURADAS_KEY, next);
+      return next;
+    });
+    this.toast.success(
+      `Factura generada para ${h.id ?? h.movil} · ${h.movil} (${h.fecha}).`,
+    );
   }
 }
